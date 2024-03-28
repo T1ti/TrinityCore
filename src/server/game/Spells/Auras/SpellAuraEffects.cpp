@@ -1711,6 +1711,8 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
 
     modelid = target->GetModelForForm(form, GetId());
 
+    SpellShapeshiftFormEntry const* formEntry = sSpellShapeshiftFormStore.LookupEntry(form);
+
     if (apply)
     {
         // remove polymorph before changing display id to keep new display id
@@ -1740,6 +1742,9 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
 
         // remove other shapeshift before applying a new one
         target->RemoveAurasByType(SPELL_AURA_MOD_SHAPESHIFT, ObjectGuid::Empty, GetBase());
+
+        if (formEntry && !(formEntry->Flags & SHAPESHIFT_FLAG_STANCE))
+            target->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_TRANSFORM);
 
         // stop handling the effect if it was removed by linked event
         if (aurApp->GetRemoveMode())
