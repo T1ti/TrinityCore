@@ -7478,7 +7478,7 @@ void Player::_ApplyItemBonuses(ItemTemplate const* proto, uint8 slot, bool apply
 
     // Add armor bonus from ArmorDamageModifier if > 0
     if (proto->ArmorDamageModifier > 0)
-        HandleStatFlatModifier(UNIT_MOD_ARMOR, TOTAL_VALUE, float(proto->ArmorDamageModifier), apply);
+        HandleStatFlatModifier(UNIT_MOD_ARMOR, BASE_VALUE, float(proto->ArmorDamageModifier), apply);
 
     if (proto->Block)
         HandleBaseModFlatValue(SHIELD_BLOCK_VALUE, float(proto->Block), apply);
