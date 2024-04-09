@@ -7460,18 +7460,19 @@ void Player::_ApplyItemBonuses(ItemTemplate const* proto, uint8 slot, bool apply
     if (armor)
     {
         UnitModifierFlatType modType = TOTAL_VALUE;
-        if (proto->Class == ITEM_CLASS_ARMOR)
+        if (proto->Class == ITEM_CLASS_ARMOR || proto->Class == ITEM_CLASS_WEAPON)
         {
-            switch (proto->SubClass)
-            {
-                case ITEM_SUBCLASS_ARMOR_CLOTH:
-                case ITEM_SUBCLASS_ARMOR_LEATHER:
-                case ITEM_SUBCLASS_ARMOR_MAIL:
-                case ITEM_SUBCLASS_ARMOR_PLATE:
-                case ITEM_SUBCLASS_ARMOR_SHIELD:
-                    modType = BASE_VALUE;
-                break;
-            }
+            modType = BASE_VALUE;
+            // switch (proto->SubClass)
+            // {
+            //     case ITEM_SUBCLASS_ARMOR_CLOTH:
+            //     case ITEM_SUBCLASS_ARMOR_LEATHER:
+            //     case ITEM_SUBCLASS_ARMOR_MAIL:
+            //     case ITEM_SUBCLASS_ARMOR_PLATE:
+            //     case ITEM_SUBCLASS_ARMOR_SHIELD:
+            //         modType = BASE_VALUE;
+            //     break;
+            // }
         }
         HandleStatFlatModifier(UNIT_MOD_ARMOR, modType, float(armor), apply);
     }
