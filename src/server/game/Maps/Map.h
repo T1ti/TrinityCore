@@ -614,6 +614,7 @@ class TC_GAME_API Map : public GridRefManager<NGridType>
         void SendRemoveTransports(Player* player);
         void SendZoneDynamicInfo(uint32 zoneId, Player* player) const;
         void SendZoneWeather(uint32 zoneId, Player* player) const;
+        uint32 GetWeatherZoneParent(uint32 zoneId) const;
         void SendZoneWeather(ZoneDynamicInfo const& zoneDynamicInfo, Player* player) const;
 
         void SetZoneMusic(uint32 zoneId, uint32 musicId);
