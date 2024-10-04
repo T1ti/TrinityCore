@@ -11323,6 +11323,44 @@ void Unit::SetControlled(bool apply, UnitState state)
                 ClearUnitState(state);
                 SetFeared(false);
                 break;
+            case UNIT_STATE_FLEEING_MOVE:
+            {
+                // when creatures have an ally to flee to in range, they get UNIT_STATE_ROAMING_MOVE and ASSISTANCE_MOTION_TYPE, lose chase and victim
+                // if there's no unit, they get UNIT_STATE_FLEEING_MOVE and TIMED_FLEEING_MOTION_TYPE with 5sec
+                //      , but still have chase as stacked 2nd generator and victim so they anturally continue chasing when it is cancelled
+
+                bool has_fleeing_state = HasUnitState(UNIT_STATE_FLEEING);
+                bool has_fleeing_move_state = HasUnitState(UNIT_STATE_FLEEING_MOVE); // TIMED_FLEEING_MOTION_TYPE [0] chase[1]
+                bool has_roaming_move_state = HasUnitState(UNIT_STATE_ROAMING_MOVE); // ASSISTANCE_MOTION_TYPE
+
+                auto victim = GetVictim();
+
+                // this case is easy
+                if (HasUnitState(UNIT_STATE_FLEEING_MOVE))
+                {
+                    GetMotionMaster()->Remove(TIMED_FLEEING_MOTION_TYPE);
+                    ClearUnitState(UNIT_STATE_FLEEING_MOVE);
+
+                }
+                // TODO : give it UNIT_STATE_FLEEING_MOVE as well
+                else if (HasUnitState(UNIT_STATE_ROAMING_MOVE))
+                {
+                    // we can't do that ? 
+                    GetMotionMaster()->Remove(ASSISTANCE_MOTION_TYPE);
+                    ClearUnitState(UNIT_STATE_ROAMING_MOVE);
+                }
+
+                if (GetVictim())
+                    SetTarget(EnsureVictim()->GetGUID());
+                if (!IsPlayer() && !IsInCombat())
+                    GetMotionMaster()->MoveTargetedHome();
+
+                // allow control to real player in control (eg charmer)
+                if (GetCharmerOrSelfPlayer())
+                    GetCharmerOrSelfPlayer()->SetClientControl(this, true);
+                break;
+            }
+
             default:
                 return;
         }

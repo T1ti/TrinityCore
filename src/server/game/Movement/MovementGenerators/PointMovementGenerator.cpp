@@ -179,18 +179,21 @@ template void PointMovementGenerator<Player>::DoFinalize(Player*, bool, bool);
 template void PointMovementGenerator<Creature>::DoFinalize(Creature*, bool, bool);
 
 //---- AssistanceMovementGenerator
-
 void AssistanceMovementGenerator::Finalize(Unit* owner, bool active, bool movementInform)
 {
     AddFlag(MOVEMENTGENERATOR_FLAG_FINALIZED);
     if (active)
         owner->ClearUnitState(UNIT_STATE_ROAMING_MOVE);
 
-    if (movementInform && HasFlag(MOVEMENTGENERATOR_FLAG_INFORM_ENABLED))
+    /*if (movementInform && HasFlag(MOVEMENTGENERATOR_FLAG_INFORM_ENABLED))*/
     {
         Creature* ownerCreature = owner->ToCreature();
-        ownerCreature->SetNoCallAssistance(false);
-        ownerCreature->CallAssistance();
+        // optional, decide if you want creature to do a call for help when cancelled early
+        {
+            ownerCreature->SetNoCallAssistance(false);
+            ownerCreature->CallAssistance();
+        }
+        //
         if (ownerCreature->IsAlive())
             ownerCreature->GetMotionMaster()->MoveSeekAssistanceDistract(sWorld->getIntConfig(CONFIG_CREATURE_FAMILY_ASSISTANCE_DELAY));
     }

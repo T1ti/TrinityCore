@@ -2879,6 +2879,9 @@ void AuraEffect::HandlePreventFleeing(AuraApplication const* aurApp, uint8 mode,
     /// TODO: find a way to cancel fleeing for assistance.
     /// Currently this will only stop creatures fleeing due to low health that could not find nearby allies to flee towards.
     target->SetControlled(!apply, UNIT_STATE_FLEEING);
+
+    // cancels fleeing for assistance (low health)
+    target->SetControlled(!apply, UNIT_STATE_FLEEING_MOVE);
 }
 
 /***************************/
