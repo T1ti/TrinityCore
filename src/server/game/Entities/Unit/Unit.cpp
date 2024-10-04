@@ -11349,6 +11349,10 @@ void Unit::SetControlled(bool apply, UnitState state)
                     GetMotionMaster()->Remove(ASSISTANCE_MOTION_TYPE);
                     ClearUnitState(UNIT_STATE_ROAMING_MOVE);
                 }
+                else
+                {
+                    break;
+                }
 
                 if (GetVictim())
                     SetTarget(EnsureVictim()->GetGUID());
